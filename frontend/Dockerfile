@@ -21,12 +21,15 @@ FROM nginx:1.10.1-alpine
 
 # Copy a custom Nginx configuration file for reverse proxy
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY /home/ubuntu/nginx-cert/libertini.crt /etc/letsencrypt/live/libertini.crt
+COPY /home/ubuntu/nginx-cert/libertini.key /etc/letsencrypt/live/libertini.key
 
 # Copy built application from the previous stage to Nginx html directory
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Expose port 80 to be accessible outside of the container
 EXPOSE 80
+EXPOSE 443
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
